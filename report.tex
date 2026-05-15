@@ -1,0 +1,79 @@
+
+\documentclass[11pt]{article} %This sets the font size and the document class of your report. In this case we use 'article' as that is ideal for shorter reports. 
+
+\usepackage[top=2.54cm, bottom=2.54cm, left=2.75cm, right=2.75cm]{geometry} %This sets the margins of the report.
+\usepackage{graphicx} % A package allowing insertion of images into the text.
+\usepackage{subcaption}
+\usepackage{caption}
+
+\usepackage{cite}         % A package that creates references in the IEEE style. 
+\newcommand{\citet}{\cite} % Use with cite only, so that it understands the natbib-specific \citet command
+\bibliographystyle{ieeetr} % IEEE referencing (use in conjunction with the cite package)
+
+%% Author-date style citation:
+%\usepackage[round]{natbib} % A package that creates references in the author-date style, with round brackets
+%\renewcommand{\cite}{\citep} % For use with natbib only: comment out for the cite package.
+%\bibliographystyle{plainnat} % Author-date referencing (use in conjunction with the natbib package)
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    numbers=left
+}
+
+\usepackage{color} % Allows the colour of the font to be changed by using the '\color' command: This is just to support the blue comments in this template...use standard (black) text in your report.
+
+\linespread{1.2} % Sets the spacing between lines of text.
+\setlength{\parindent}{0cm}  % Suppresses indentation of text at the start of a paragraph
+
+\begin{document} % This begins the document proper and ends the pre-amble
+\begin{titlepage} % Begins the titlepage of the document
+\begin{center} % Starts the beginning of an environment where all text is centered.
+
+{\Huge Simulating a Particle Detector and Particle Decay in C++ }\\[0.5cm] % [0.5cm] sets the distance between this line and the next.
+\textit{Aidan Hughes}~\\[0.3cm] % The '\\' starts a new paragraph, and will only work after a paragraph has started, unless we use '~'.
+\textit{11306492}~\\[0.3cm]
+School of Physics and Astronomy~\\[0.3cm]
+University of Manchester~\\[0.3cm]
+Third Year Code Report~\\[0.3cm]
+May 2026~\\[2cm]
+
+
+
+\end{center}
+{\Large \textbf{Abstract}}~\\[0.3cm]
+
+
+\end{titlepage}
+\pagenumbering{gobble} % This stops the title page being numbered
+\clearpage
+\pagenumbering{arabic} % sets the style of page numbering for the report
+\setcounter{page}{2} % Starts the numbering at page 2 as typically the first page is not numbered
+
+\newpage % Starts a new page to begin the report on.
+
+\section{Introduction} 
+\label{intro}
+
+\section{Theory}
+
+
+
+\section{Results}
+   
+\begin{lstlisting}
+	int main()
+	{
+		return 0;
+	}
+\end{lstlisting} 
+
+\newpage
+% \bibliography{report_template_library} % Specifies the bibliography file where our references are stored. If the library file and document are not in the same folder then the file path must also be included.
+
+
+\end{document}
