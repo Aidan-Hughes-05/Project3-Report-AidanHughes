@@ -116,7 +116,7 @@ The Particle class is constructed using a FourMomentum object, a double for mass
 A consequence of using smart pointers is the need to use the Rule of 5, that being the redefinition of the copy constructor and assignment, Listing 
 \ref{ruleof5}, and the move constructor and assignment, for which the default was sufficient. The copy  had to be constructor and assignment redefined as unique pointers cannot be copied or a new unique pointer made pointing to the same FourMomentum object as that would result in two unique pointers to the same object, which is not allowed as would result in the first pointer deleting itself and the object when out of scope, leaving the second pointing to nothing, therefore allowing memory leaks. So instead, a copy of the FourMomentum is made for the new (or existing for assignment) pointer to point to. The default move constructor and assignment can still used however, as moving a unique pointer does not cause two pointers to the object. 
 
-\begin{lstlisting}[firstnumber=39, caption={Code snippet from Particle.cpp showing the copy constructor and assignment redefinition in the Particle class.}, label=ruleof5]
+\begin{lstlisting}[firstnumber=16, caption={Code snippet from Particle.cpp showing the copy constructor and assignment redefinition in the Particle class.}, label=ruleof5]
 // Copy Constructor
 Particle::Particle(const Particle &other_particle) : four_momentum_ptr_ 
 (std::make_unique<FourMomentum>(*other_particle.four_momentum_ptr_)),
@@ -140,17 +140,59 @@ Particle & Particle::operator=(const Particle &other_particle)
 	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
 	\label{particleuml}
 \end{figure}
-To create classes for the different types of particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. For inheritance, the destructors of the parent class must be defined and virtual, and destructors defined in child class. This is so only the child class destructor is called when the object goes out of scope, avoiding double deletion.
+To create classes for the different types of particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. For inheritance, the destructors of the parent class must be defined and virtual, and destructors defined in child class. This is so only the child class destructor is called when the object goes out of scope, avoiding double deletion. 	
 
 The Particle, Hadron and Lepton classes are abstract classes, so they cannot be instantiated, but allow child classes to inherit important data members and member functions from them. Abstract classes are created by making a function within them pure virtual, using virtual keyword and an =0 at the end of the function declaration. This function must then be defined in the child class, so the info function, which prints the data about an object in this project, was used as every class must have their own defined anyway.
 
 Non pure virtual functions were also useful, especially for flags and the decay function. The flags were boolean functions that returned true if a specific property was true for that particle, useful if it couldn't be easily discerned from another property of the particle, for example when deciding if a particle could be detected by the electromagnetic calorimeter. This was used for dynamic polymorphism in the ParticleBunch and Detector classes. 
-
+\begin{lstlisting}[firstnumber=16, caption={Code snippet from Tau.cpp decay member function. Neutrino instantiation and energy/momentum calculation omitted for clarity}, label=decay]
+// decay function - doesn't follow conservation laws.
+std::deque<std::unique_ptr<Particle>> Tau::decay()
+{
+  std::deque<std::unique_ptr<Particle>> decay_products{};
+  // splitting tau mass between two produced neutrinos
+  // producing muon decay product
+  decay_products.push_back(std::make_unique<Muon>(
+  Muon(std::move(*four_momentum_ptr_), std::move(lepton_number_))));
+  // producing neutrinos
+  // pushing neutrinos onto decay_products
+  return decay_products;
+}
+\end{lstlisting} 
+The Higgs and Tau (and Particle) classes possess a decay function, which returns a deque of pointers to the decay products. The Tau decay to muon and neutrinos, Listing \ref{decay}, showcases the move of FourMomentum to create new Muon with its properties. 
 \subsection{ParticleBunch}
 
-The ParticleBunch class stored particles as base class unique pointers
+The ParticleBunch class stored particles as a deque of base class unique pointers. Base class pointers allow all child classes of the base class to be stored in the same container via a unique pointer. Not only does this reduce the size of the deque stored on the object, it also allows for dynamic(run-time) polymorphism, shown in Listing \ref{sbs} when particle ptr calls the decays function, which is a flag for if a particle decays. 
 
-The particle class hierarchy uses polymorphism
+\begin{lstlisting}[firstnumber=108, caption={Code snippet from Particle.cpp showing the copy constructor and assignment redefinition in the Particle class.}, label=sbs]
+void ParticleBunch::decay()
+{
+  // deque to store undecayed particles and undecayed decay products
+  std::deque<std::unique_ptr<Particle>> result{};
+  while(!(particle_bunch_.empty()))
+  {
+    // moves first pointer to particle in deque
+    auto particle_ptr = std::move(particle_bunch_.front());
+    // removes front as now it is pointer to null
+    particle_bunch_.pop_front();
+    // checks if particle decays
+    if(particle_ptr->decays())
+    {
+      // decays particle and push decay products onto back of deque
+    }
+    else 
+    {
+    // pushes undecayed particles into results
+    result.push_back(std::move(particle_ptr));
+    }
+  }
+  // restores particle bunch by moving results to it
+  particle_bunch_ = std::move(result);
+}
+\end{lstlisting}
+
+Listing \ref{sbs} also shows the reason for using a deque to store the particle pointers, as a deque allows the particle next to be decayed to moved then popped from the front, whilst its decay products are pushed from the back of the container, resulting in first in first out. Therefore, if a decay product was decayable, it would also be decayed thanks to the while loop. 
+
 PLAN
 OOP EXAMPLES 
 encapsulation - all classes, particle probaly best
@@ -171,10 +213,10 @@ rand() for efficiency / misdetection calulation
 \section{Results}
    
 \begin{lstlisting}
-	int main()
-	{
-		return 0;
-	}
+int main()
+{
+  return 0;
+}
 \end{lstlisting} 
 \section{Discussion}
 errors on detected value. Extra abstraction in detect function. 
