@@ -109,17 +109,6 @@ Listing \ref{fmoperator} also showcases the use of const and references, used wi
 
 The FourMomentum class also includes dot product and info member functions, which return the dot product as a double or print the components of the FourMomentum. 
 
-\subsection{Particle hierarchy}
-
-To create classes for the particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. The Particle, Hadron and Lepton classes are abstract classes, so they cannot be instantiated, but allow child classes to inherit important data members and member functions from them. 
-
-\begin{figure} 
-	\centering
-	\includegraphics[scale=0.5]{class_particle__inherit__graph.pdf}
-	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
-	\label{particleuml}
-\end{figure}
-
 \subsection{Particle}
 
 The Particle class is constructed using a FourMomentum object, a double for mass and a integer for charge. The FourMomentum is stored as a unique pointer to the FourMomentum object, as this means only the address to the FourMomentum stored in the Particle. A smart pointer will protect against memory leaks by deleting the object and itself when it goes out of scope, unlike a raw pointer. The unique kind was chosen as only the particle can possess its own four momentum, so there is no need for other pointers to the FourMomentum, and therefore no need for a shared pointer. 
@@ -143,6 +132,25 @@ Particle & Particle::operator=(const Particle &other_particle)
   return *this;
 }
 \end{lstlisting} 
+
+\subsection{Particle hierarchy}
+\begin{figure} 
+	\centering
+	\includegraphics[scale=0.5]{class_particle__inherit__graph.pdf}
+	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
+	\label{particleuml}
+\end{figure}
+To create classes for the different types of particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. For inheritance, the destructors of the parent class must be defined and virtual, and destructors defined in child class. This is so only the child class destructor is called when the object goes out of scope, avoiding double deletion.
+
+The Particle, Hadron and Lepton classes are abstract classes, so they cannot be instantiated, but allow child classes to inherit important data members and member functions from them. Abstract classes are created by making a function within them pure virtual, using virtual keyword and an =0 at the end of the function declaration. This function must then be defined in the child class, so the info function, which prints the data about an object in this project, was used as every class must have their own defined anyway.
+
+Non pure virtual functions were also useful, especially for flags and the decay function. The flags were boolean functions that returned true if a specific property was true for that particle, useful if it couldn't be easily discerned from another property of the particle, for example when deciding if a particle could be detected by the electromagnetic calorimeter. This was used for dynamic polymorphism in the ParticleBunch and Detector classes. 
+
+\subsection{ParticleBunch}
+
+The ParticleBunch class stored particles as base class unique pointers
+
+The particle class hierarchy uses polymorphism
 PLAN
 OOP EXAMPLES 
 encapsulation - all classes, particle probaly best
