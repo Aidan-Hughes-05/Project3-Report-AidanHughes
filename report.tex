@@ -122,7 +122,8 @@ To create classes for the particles, an inheritance hierarchy was used, shown in
 
 \subsection{Particle}
 
-The Particle class, which is constructed using a FourMomentum object,
+The Particle class is constructed using a FourMomentum object, a double for mass and a integer for charge. The FourMomentum is stored as a unique pointer to the FourMomentum object, as this means only the address to the FourMomentum stored in the Particle. A smart pointer will protect against memory leaks by deleting the object and itself when it goes out of scope, unlike a raw pointer. The unique kind was chosen as only the particle can possess its own four momentum, so there is no need for other pointers to the FourMomentum, and therefore no need for a shared pointer. 
+
 PLAN
 OOP EXAMPLES 
 encapsulation - all classes, particle probaly best
