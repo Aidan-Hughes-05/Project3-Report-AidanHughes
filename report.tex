@@ -67,9 +67,14 @@ To simulate the sub-detectors and particles in C++, an inheritance chain was est
 \section{Code Implementation}
 Object oriented programming (OOP) is built on four pillars: encapsulation, inheritance, polymorphism and abstraction.
 \subsection{FourMomentum} 
-- values stored as doubles(encap)
-- allowed for energy verifaction
-- overloaded + operator and added dot product
+
+The FourMomentum class holds the energy and momentum properties of a particle.
+The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format then a vector in which the index corresponding to each property is not explicit to anyone extending the class.
+ The components are accessed via getters and setters, with getters, such as get\_x\_momentum, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. 
+
+In this case the encapsulation allowed for value checking on inputted energy to ensure it was positive, throwing an error if not, which would not have been possible if the data member was publicly accessible. 
+overloaded operator and added dot product
+
 \subsection{Particle hierarchy}
 
 
