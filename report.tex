@@ -22,7 +22,9 @@
 	basicstyle=\ttfamily\small,
 	keywordstyle=\color{blue},
 	commentstyle=\color{gray},
-	numbers=left
+	stringstyle=\color{red},
+	numbers=left,
+	captionpos=b
 }
 
 \usepackage{color} % Allows the colour of the font to be changed by using the '\color' command: This is just to support the blue comments in this template...use standard (black) text in your report.
@@ -70,11 +72,47 @@ Object oriented programming (OOP) is built on four pillars: encapsulation, inher
 
 The FourMomentum class holds the energy and momentum properties of a particle.
 The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format then a vector in which the index corresponding to each property is not explicit to anyone extending the class.
- The components are accessed via getters and setters, with getters, such as get\_x\_momentum, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. 
+The components are accessed via getters and setters, with getters, such as get\_x\_momentum, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. 
 
 In this case the encapsulation allowed for value checking on inputted energy to ensure it was positive, throwing an error if not, which would not have been possible if the data member was publicly accessible. 
-overloaded operator and added dot product
 
+\begin{lstlisting}
+// Validation
+bool FourMomentum::validate_energy(double energy) const
+{
+  if(energy < 0)
+  {
+    std::cerr<<"energy cannot be negative"<<std::endl;
+    return false;
+  }
+  else{return true;}
+}
+// Setter
+void FourMomentum::set_energy(double energy)
+{
+  if(!validate_energy(energy))
+  {
+    throw std::invalid_argument("negative energy");
+  }
+  energy_ = energy;
+}
+\end{lstlisting} 
+
+\begin{lstlisting}[firstnumber=39, caption={Code snippet from FourMomentum.cpp showing the overloading of + and += operators }]
+// Addition
+FourMomentum FourMomentum::operator+(const FourMomentum &vector) const
+{
+  FourMomentum result(energy_ + vector.energy_, x_momentum_ 
+    + vector.x_momentum_, y_momentum_ + vector.y_momentum_, z_momentum_ + vector.z_momentum_);
+  return result;
+}
+// Increment
+FourMomentum & FourMomentum::operator+=(const FourMomentum &vector)
+{
+  *this = *this + vector;
+  return *this;
+}
+\end{lstlisting} 
 \subsection{Particle hierarchy}
 
 
