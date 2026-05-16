@@ -111,8 +111,18 @@ The FourMomentum class also includes dot product and info member functions, whic
 
 \subsection{Particle hierarchy}
 
+To create classes for the particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. The Particle, Hadron and Lepton classes are abstract classes, so they cannot be instantiated, but allow child classes to inherit important data members and member functions from them. 
 
+\begin{figure} 
+	\centering
+	\includegraphics[scale=0.5]{class_particle__inherit__graph.pdf}
+	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
+	\label{particleuml}
+\end{figure}
 
+\subsection{Particle}
+
+The Particle class, which is constructed using a FourMomentum object,
 PLAN
 OOP EXAMPLES 
 encapsulation - all classes, particle probaly best
