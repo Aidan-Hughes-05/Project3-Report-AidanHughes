@@ -224,7 +224,7 @@ ParticleType is an enum class created to store all the particle types used, so t
 
 The ParticleType.cpp also contains conversion functions for string to ParticleType and ParticleType to string, abstracting the validation of particle type inputs into one place. The string\_to\_particle\_type function, Listing \ref{strtopt} , uses an unordered map to store key-value pairs, so the string can be looked up and the equivalent ParticleType returned. Using a map allows for multiple strings to correspond to the same ParticleType, such as with "positron" and "anti\_electron" both converting to ParticleType::POSITRON.
 
-\begin{lstlisting}[firstnumber=13, caption={Code snippet from Tau.cpp decay member function. Neutrino instantiation and energy/momentum calculation omitted for clarity}, label=strtopt]
+\begin{lstlisting}[firstnumber=13, caption={Code snippet from ParticleType.cpp shwoing the string\_to\_particle\_type conversion function.}, label=strtopt]
 // std::string to ParticleType
 ParticleType string_to_particle_type(std::string name)
 {
@@ -267,6 +267,20 @@ SubDetector has two protected member variables, efficiency, which is as a percen
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}[caption={Expected output for Detector.info() for a detector composing of 1 track, 1 electromagnetic calorimeter, 2 hadronic calorimeter and a muon spectrometer.}, label=detectorinfo]
+       sub-detector          |             properties              
+-------------------------------------------------------------------
+         tracker             | material : silicon, efficiency : 100%
+-------------------------------------------------------------------
+ electromagnetic calorimeter | material : argon, efficiency : 100%
+-------------------------------------------------------------------
+    hadronic calorimeter     | material : steel, efficiency : 90%
+-------------------------------------------------------------------
+    hadronic calorimeter     | material : iron, efficiency : 95%
+-------------------------------------------------------------------
+     muon spectrometer       | material : aluminium, efficiency : 100%
+-------------------------------------------------------------------
+\end{lstlisting}
 \begin{lstlisting}[caption={Expected output for Detector when a photon and a proton are passed through it, with the max energy from each sub-detector returned along with a prediction of this outcome based on the energy returned.}, label=result]
 -------------------------------------------------------------------
 Particle : photon | Expected Energy : 5332 MeV 
