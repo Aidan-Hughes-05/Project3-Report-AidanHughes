@@ -86,7 +86,7 @@ void FourMomentum::set_energy(double energy)
 }
 \end{lstlisting} 
 
-A major benifit of constructing separate class to hold particle four momentum is to be able to overload operators, such as the addition and increment operators shown in Listing \ref{fmoperator}
+A major benefit of constructing separate class to hold particle four momentum is to be able to overload operators, such as the addition (+) and increment (+=) operators shown in Listing \ref{fmoperator}, to provide functions more suitable to the class. The addition operator now adds two four-momenta component-wise and returns the result as a new FourMomentum object, acting as a form of static (compile-time) polymorphism. The advantage of this can be seen in the overloaded increment operator, where the addition operator is used to add the second FourMomentum object's components into the first's, utilizing the 'this' pointer. 
 
 \begin{lstlisting}[firstnumber=39, caption={Code snippet from FourMomentum.cpp showing the overloading of + and += operators to add FourMomentum objects component-wise.}, label=fmoperator]
 // Addition
@@ -105,6 +105,8 @@ FourMomentum & FourMomentum::operator+=(const FourMomentum &vector)
 }
 \end{lstlisting} 
 \subsection{Particle hierarchy}
+
+Listing \ref{fmoperator} also showcases 
 
 
 PLAN
