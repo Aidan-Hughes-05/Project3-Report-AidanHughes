@@ -57,7 +57,11 @@ The aim of this project was to utilize object oriented programming practices to 
 
 \section{Introduction} 
 \label{intro}
-The aim of this project was to create a C++ library that simulates a particle detector, through sub-detectors and the particles commonly found in accelerators. This was done through two inheritance chains, one for the sub-detectors with the base class SubDetector and one for particles with base class Particle. 
+The aim of this project was to create a C++ library that simulates a particle detector and its detecting functionality. Particle detectors compose of multiple sub-detector types, each of which measure different types of particles. The tracker, the first sub-detector a particle will pass through, uses magnetic fields to measure particle paths, so can only measure charged particles. Next are the calorimeters, which are split into two, an electromagnetic and a hadronic calorimeter. The electromagnetic calorimeter causes electrons and photons to trigger a particle shower which is measured to finds their energy. The hadronic calorimeter does the same but for protons and neutrons. Finally, due to muons high energy, they are not detected by the calorimeters, and p
+
+
+
+This was done through two inheritance chains, one for the sub-detectors with the base class SubDetector and one for particles with base class Particle. 
 \section{Code Implementation}
 Object oriented programming (OOP) is built on four pillars: encapsulation, inheritance, polymorphism and abstraction. 
 
