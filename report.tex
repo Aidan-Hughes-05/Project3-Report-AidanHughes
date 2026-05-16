@@ -104,9 +104,11 @@ FourMomentum & FourMomentum::operator+=(const FourMomentum &vector)
   return *this;
 }
 \end{lstlisting} 
+
+Listing \ref{fmoperator} also showcases the use of const and references, used widely in this project. First, the FourMomentum object, vector, is passed to the function as a const reference, which means a copy of memory address of the vector is passed to the function, rather than a copy of the object. This saves on memory usage as objects are much larger than their addresses, so take up more memory when copied. However, referencing allows the underlying object to be changed by the function, which is not wanted for the addition and increment operators, so const is used, which ensures the object is not changed by the function using it. Moreover, the addition operator is defined as a const member function by the const at the end of line 40, which prevents it from changing the calling FourMomentum object. This is not included in the increment operator as that intents to change the calling FourMomentum, instead the return type is a reference to
+
 \subsection{Particle hierarchy}
 
-Listing \ref{fmoperator} also showcases 
 
 
 PLAN
