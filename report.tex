@@ -70,7 +70,7 @@ To simulate the sub-detectors and particles in C++, an inheritance chain was est
 Object oriented programming (OOP) is built on four pillars: encapsulation, inheritance, polymorphism and abstraction.
 \subsection{FourMomentum} 
 
-The FourMomentum class holds the energy and momentum properties of a particle.
+The FourMomentum class is constructed from 4 doubles corresponding to each four-momentum component: energy and the x, y and z momenta.
 The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format then a vector in which the index corresponding to each property is not explicit to anyone extending the class.
 The components are accessed via getters and setters, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. In this case the encapsulation allowed for value checking on inputted energy, Listing \ref{ssss}, to ensure it was positive, throwing an error if not, which would not have been possible if the data member was publicly accessible.
 
@@ -86,7 +86,7 @@ void FourMomentum::set_energy(double energy)
 }
 \end{lstlisting} 
 
-A major benefit of constructing separate class to hold particle four momentum is to be able to overload operators, such as the addition (+) and increment (+=) operators shown in Listing \ref{fmoperator}, to provide functions more suitable to the class. The addition operator now adds two four-momenta component-wise and returns the result as a new FourMomentum object, acting as a form of static (compile-time) polymorphism. The advantage of this can be seen in the overloaded increment operator, where the addition operator is used to add the second FourMomentum object's components into the first's, utilizing the 'this' pointer. 
+A major benefit of constructing separate class to hold particle four momentum is to be able to overload operators, such as the addition (+) and increment (+=) operators shown in Listing \ref{fmoperator}, to provide functions more suitable to the class. The addition operator now adds two four-momenta component-wise and returns the result as a new FourMomentum object, acting as a form of static (compile-time) polymorphism. The advantage of this can be seen in the overloaded increment operator, where the addition operator is used to add the second FourMomentum object's components into the first's, utilizing the 'this' pointer, which always points to the calling object. 
 
 \begin{lstlisting}[firstnumber=39, caption={Code snippet from FourMomentum.cpp showing the overloading of + and += operators to add FourMomentum objects component-wise.}, label=fmoperator]
 // Addition
@@ -105,7 +105,9 @@ FourMomentum & FourMomentum::operator+=(const FourMomentum &vector)
 }
 \end{lstlisting} 
 
-Listing \ref{fmoperator} also showcases the use of const and references, used widely in this project. First, the FourMomentum object, vector, is passed to the function as a const reference, which means a copy of memory address of the vector is passed to the function, rather than a copy of the object. This saves on memory usage as objects are much larger than their addresses, so take up more memory when copied. However, referencing allows the underlying object to be changed by the function, which is not wanted for the addition and increment operators, so const is used, which ensures the object is not changed by the function using it. Moreover, the addition operator is defined as a const member function by the const at the end of line 40, which prevents it from changing the calling FourMomentum object. This is not included in the increment operator as that intents to change the calling FourMomentum, instead the return type is a reference to
+Listing \ref{fmoperator} also showcases the use of const and references, used widely in this project. First, the FourMomentum object, vector, is passed to the function as a const reference, which means a copy of memory address of the vector is passed to the function, rather than a copy of the object. This saves on memory usage as objects are much larger than their addresses, so take up more memory when copied. However, referencing allows the underlying object to be changed by the function, which is not wanted for the addition and increment operators, so const is used, which ensures the object is not changed by the function using it. Moreover, the addition operator is defined as a const member function by the const at the end of line 40, which prevents it from changing the calling FourMomentum object. This is not included in the increment operator as that intents to change the calling FourMomentum, instead the return is a reference to the calling FourMomentum. 
+
+The FourMomentum class also includes dot product and info member functions, which return the dot product as a double or print the components of the FourMomentum. 
 
 \subsection{Particle hierarchy}
 
