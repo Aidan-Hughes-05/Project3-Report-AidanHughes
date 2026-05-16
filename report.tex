@@ -193,6 +193,7 @@ void ParticleBunch::decay()
 
 Listing \ref{sbs} also shows the reason for using a deque to store the particle pointers, as a deque allows the particle next to be decayed to moved then popped from the front, whilst its decay products are pushed from the back of the container, resulting in first in first out. Therefore, if a decay product was decayable, it would also be decayed thanks to the while loop. 
 
+The ParticleBunch can be constructed from a vector of strings, which is the same way the main.cpp file reading function outputs the data read in. 
 PLAN
 OOP EXAMPLES 
 encapsulation - all classes, particle probaly best
@@ -206,7 +207,6 @@ FEATURES USED
 enum class for particle type - validation in one place
 														 - easier to scale switch cases than if enables
 - re used for Neutrino flavour 
-deque to do particle decay
 unordered map to do key value pairs 
 rand() for efficiency / misdetection calulation
 
@@ -219,7 +219,9 @@ int main()
 }
 \end{lstlisting} 
 \section{Discussion}
-errors on detected value. Extra abstraction in detect function. 
+Options for extending the project are to add more decay modes to the Higgs, for example a ZZ boson decay along with an accompanying Z boson class and its decays. The decay path chosen could be decided by a random number generator like rand(). This would be fairly easy to implement in the existing code as the decay function already exists, so besides some extra abstraction to keep the decay function clean, very little besides writing the code for the decay itself would be needed.
+
+Another option would be to add a random standard error on the detector reading. A skeleton of a code that would work for this is commented out in the SubDetector class. The code generates a uniform random number and then uses a cumulative distribution function to transform it into an exponential distribution and then to a $\sigma$ value. If the standard error is then put to the power of this $\sigma$ value, the result would be akin to a detector having a random standard error. The complication comes with the lack of total abstraction in the sub-detector detect function, where each detectors detect function would have to be changed to add this random standard error to the output. If there was instead a protected member function that took care of calculating the detected energy, this would not be the case.
 \newpage
 % \bibliography{report_template_library} % Specifies the bibliography file where our references are stored. If the library file and document are not in the same folder then the file path must also be included.
 
