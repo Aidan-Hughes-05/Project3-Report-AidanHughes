@@ -304,6 +304,9 @@ This interface is useful as it is the same as the output interface of the open_f
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%
+Detector class and ParticleBunch class can be constructed from a vector of strings. This interface is useful as it is the same as the output interface of the open\_file function in main.cpp.
+By calling the detector info() function, an output like Listing \ref{detectorinfo} is printed to the terminal. 
+
 \begin{lstlisting}[caption={Expected output for Detector.info() for a detector composing of 1 track, 1 electromagnetic calorimeter, 2 hadronic calorimeter and a muon spectrometer.}, label=detectorinfo]
        sub-detector          |             properties              
 -------------------------------------------------------------------
@@ -318,6 +321,8 @@ This interface is useful as it is the same as the output interface of the open_f
      muon spectrometer       | material : aluminium, efficiency : 100%
 -------------------------------------------------------------------
 \end{lstlisting}
+
+Next, by passing a ParticleBunch, or a single particle,  through the Detector detect function, the real particle type and particle energy is printed along with detected energies, and a prediction of the particle type, shown in Listing \ref{result}.  
 \begin{lstlisting}[caption={Expected output for Detector when a photon and a proton are passed through it, with the max energy from each sub-detector returned along with a prediction of this outcome based on the energy returned.}, label=result]
 -------------------------------------------------------------------
 Particle : photon | Expected Energy : 5332 MeV 
@@ -336,12 +341,6 @@ Maximum muon spectrometer energy detected : 0 MeV
 Particle detected as a proton with energy 1234 MeV 
 -------------------------------------------------------------------
 \end{lstlisting}
-\begin{lstlisting}
-int main()
-{
-  return 0;
-}
-\end{lstlisting} 
 \section{Discussion}
 Options for extending the project are to add more decay modes to the Higgs, for example a ZZ* boson decay along with an accompanying Z boson class and its decays. The decay path chosen could be decided by a random number generator like rand(). This would be fairly easy to implement in the existing code as the decay function already exists, so besides some extra abstraction to keep the decay function clean, very little besides writing the code for the decay itself would be needed.
 
