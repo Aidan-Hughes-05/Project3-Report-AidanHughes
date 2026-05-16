@@ -222,7 +222,24 @@ ParticleType is an enum class created to store all the particle types used, so t
 rand() for efficiency / misdetection calulation
 
 \section{Results}
-   
+\begin{lstlisting}[caption={Expected output for Detector when a photon and a proton are passed through it, with the max energy from each sub-detector returned along with a prediction of this outcome based on the energy returned.}, label=result]
+-------------------------------------------------------------------
+Particle : photon | Expected Energy : 5332 MeV 
+Maximum tracker energy detected : 0 MeV 
+Maximum electromagentic calorimeter energy detected : 5332 MeV 
+Maximum hadronic calorimeter  energy detected : 0 MeV 
+Maximum muon spectrometer energy detected : 0 MeV 
+Particle detected as a photon with energy 5332 MeV 
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+Particle : proton | Expected Energy : 1234 MeV 
+Maximum tracker energy detected : 1234 MeV 
+Maximum electromagentic calorimeter energy detected : 0 MeV 
+Maximum hadronic calorimeter  energy detected : 1234 MeV 
+Maximum muon spectrometer energy detected : 0 MeV 
+Particle detected as a proton with energy 1234 MeV 
+-------------------------------------------------------------------
+\end{lstlisting}
 \begin{lstlisting}
 int main()
 {
