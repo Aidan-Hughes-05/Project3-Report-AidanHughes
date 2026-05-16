@@ -220,7 +220,23 @@ ParticleType is an enum class created to store all the particle types used, so t
 - re used for Neutrino flavour 
 
 rand() for efficiency / misdetection calulation
-
+\subsection{SubDetector}
+\begin{lstlisting}[firstnumber=36, caption={Code snippet misdetection function where rand() \% 100 gets a number between 0-99, and if its greater than the efficiency, a misdetection occurs. srand(time(0)) seeds the randon number generation.}, label=misdetected]
+bool SubDetector::misdetected() const
+{
+  srand(time(0));
+  if (rand() % 100 >= efficiency_){return true;}
+  return false;
+}
+\end{lstlisting}
+SubDetector has two protected member variables, efficiency, which is as a percentage and required to be between 1\%-100\%, and material which is a string. The efficiency is used in co-ordination with rand(), Listing to cause misdetections by returning true if one occurs, resulting in the detector returning 0.
+\subsection{SubDetector hierarchy}
+\begin{figure} 
+	\centering
+	\includegraphics[scale=0.6]{class_sub_detector__inherit__graph.pdf}
+	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
+	\label{detectoruml}
+\end{figure}
 \section{Results}
 \begin{lstlisting}[caption={Expected output for Detector when a photon and a proton are passed through it, with the max energy from each sub-detector returned along with a prediction of this outcome based on the energy returned.}, label=result]
 -------------------------------------------------------------------
