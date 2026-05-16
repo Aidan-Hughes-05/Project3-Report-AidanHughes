@@ -266,16 +266,39 @@ SubDetector has two protected member variables, efficiency, which is as a percen
 	\label{detectoruml}
 \end{figure}
 Figure \ref{detectoruml} shows the Detector class inheritance hierarchy. The child detectors function similarly, each having info and detect functions. The detect functions use the flags discussed in Section \ref{particleh} and run-time polymorphism to discern wether a particle would be detected, Listing \ref{detectorsub}.  
-\begin{lstlisting}[firstnumber=13, caption={Code snippet from ElectromagneticCalorimeter.cpp showing the detect function and how the flags and misdetect function is incorparated.}, label=detectorsub]
-double ElectromagneticCalorimeter::detect(const Particle &particle) const
+\begin{lstlisting}[firstnumber=11, caption={Code snippet from ElectromagneticCalorimeter.cpp showing the detect function and how the flags and misdetect function is incorparated.}, label=detectorsub]
+double ElectromagneticCalorimeter::detect(
+	const Particle &particle) const
 {
   if(misdetected()){return 0;}
   if(!particle.electromagnetic_calorimeter_detectable())
   {
     return 0;
   }
-	return particle.get_energy();
+  return particle.get_energy();
 }
+\end{lstlisting} 
+\subsection{Detector}
+Detector class containers the different types of subdetectors in separate vectors. This allows for multiple of one type of subdetector and simplifies the combined detect function where only the max detected value is returned. It has a private member function predict\_particle, Listing \ref{predict}, which uses detected energy to predict the particle and without using any other information about the particle. 
+
+\begin{lstlisting}[firstnumber=117, caption={Code snippet from Detector.cpp showing the logic used to predict particle that passed through the detector.}, label=predict]
+// estimate particle type from detections
+std::string Detector::predict_particle(double emcal_energy, double hcal_energy,
+    double tracker_energy, double muon_spec_energy) const
+{
+  if(muon_spec_energy != 0) {return "muon";}
+  if(tracker_energy != 0)
+  {
+    if(emcal_energy !=0) {return "electron";}
+    else {return "proton";}
+  }
+  if(emcal_energy !=0) {return "photon";}
+  else if(hcal_energy !=0) {return "neutron";}
+  return "neutrino";
+}
+
+Detector class, like ParticleBunch, can be constructed from a vector of strings.
+This interface is useful as it is the same as the output interface of the open_file function in main.cpp.
 }
 \end{lstlisting} 
 %%%%%%%%%%%%%%%%%%%%%%%
