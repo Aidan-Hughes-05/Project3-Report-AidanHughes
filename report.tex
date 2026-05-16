@@ -68,8 +68,9 @@ Along with the particles mentioned above, tau and Higgs particles are also found
 To simulate the sub-detectors and particles in C++, an inheritance chain was established for each. 
 \section{Code Implementation}
 Object oriented programming (OOP) is built on four pillars: encapsulation, inheritance, polymorphism and abstraction.
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{FourMomentum} 
-
+%%%%%%%%%%%%%%%%%%%%%%%
 The FourMomentum class is constructed from 4 doubles corresponding to each four-momentum component: energy and the x, y and z momenta.
 The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format then a vector in which the index corresponding to each property is not explicit to anyone extending the class.
 The components are accessed via getters and setters, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. In this case the encapsulation allowed for value checking on inputted energy, Listing \ref{ssss}, to ensure it was positive, throwing an error if not, which would not have been possible if the data member was publicly accessible.
@@ -108,9 +109,9 @@ FourMomentum & FourMomentum::operator+=(const FourMomentum &vector)
 Listing \ref{fmoperator} also showcases the use of const and references, used widely in this project. First, the FourMomentum object, vector, is passed to the function as a const reference, which means a copy of memory address of the vector is passed to the function, rather than a copy of the object. This saves on memory usage as objects are much larger than their addresses, so take up more memory when copied. However, referencing allows the underlying object to be changed by the function, which is not wanted for the addition and increment operators, so const is used, which ensures the object is not changed by the function using it. Moreover, the addition operator is defined as a const member function by the const at the end of line 40, which prevents it from changing the calling FourMomentum object. This is not included in the increment operator as that intents to change the calling FourMomentum, instead the return is a reference to the calling FourMomentum. 
 
 The FourMomentum class also includes dot product and info member functions, which return the dot product as a double or print the components of the FourMomentum. 
-
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Particle}
-
+%%%%%%%%%%%%%%%%%%%%%%%
 The Particle class is constructed using a FourMomentum object, a double for mass and a integer for charge. The FourMomentum is stored as a unique pointer to the FourMomentum object, as this means only the address to the FourMomentum stored in the Particle. A smart pointer will protect against memory leaks by deleting the object and itself when it goes out of scope, unlike a raw pointer. The unique kind was chosen as only the particle can possess its own four momentum, so there is no need for other pointers to the FourMomentum, and therefore no need for a shared pointer. 
 
 A consequence of using smart pointers is the need to use the Rule of 5, that being the redefinition of the copy constructor and assignment, Listing 
@@ -132,8 +133,9 @@ Particle & Particle::operator=(const Particle &other_particle)
   return *this;
 }
 \end{lstlisting} 
-
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Particle hierarchy}
+%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure} 
 	\centering
 	\includegraphics[scale=0.5]{class_particle__inherit__graph.pdf}
@@ -159,9 +161,10 @@ std::deque<std::unique_ptr<Particle>> Tau::decay()
   return decay_products;
 }
 \end{lstlisting} 
-The Higgs and Tau (and Particle) classes possess a decay function, which returns a deque of pointers to the decay products. The Tau decay to muon and neutrinos, Listing \ref{decay}, showcases the move of FourMomentum to create new Muon with its properties. 
+The Higgs and Tau (and Particle) classes possess a decay function, which returns a deque of pointers to the decay products. The Tau decay to muon and neutrinos, Listing \ref{decay}, showcases the move of FourMomentum to create new Muon with its properties.
+%%%%%%%%%%%%%%%%%%%%%%% 
 \subsection{ParticleBunch}
-
+%%%%%%%%%%%%%%%%%%%%%%%
 The ParticleBunch class stored particles as a deque of base class unique pointers. Base class pointers allow all child classes of the base class to be stored in the same container via a unique pointer. Not only does this reduce the size of the deque stored on the object, it also allows for dynamic(run-time) polymorphism, shown in Listing \ref{sbs} when particle ptr calls the decays function, which is a flag for if a particle decays. 
 
 \begin{lstlisting}[firstnumber=108, caption={Code snippet from Particle.cpp showing the copy constructor and assignment redefinition in the Particle class.}, label=sbs]
@@ -213,14 +216,36 @@ std::unique_ptr<Particle> ParticleBunch::particle_from_file(
   // gets remaining particle values
   data>>energy>>x_momentum>>y_momentum>>z_momentum;
 \end{lstlisting}
-
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ParticleType}
+%%%%%%%%%%%%%%%%%%%%%%%
 
-ParticleType is an enum class created to store all the particle types used, so they can be easily implemented as member variables, as in the case of the Neutrino flavour\_, or to use switch case logic instead of overly long if else chains. The ParticleType.cpp also contains conversion functions for string to ParticleType and ParticleType to string, abstracting the validation of particle type inputs into one place. The string\_to\_particle\_type function, , uses an unordered map to store key-value pairs, so the string can be looked up and the equivalent ParticleType returned. Using a map allows for multiple strings to correspond to the same ParticleType, such as with "positron" and "anti\_electron" both converting to ParticleType::ANTIELECTRON. 
-- re used for Neutrino flavour 
+ParticleType is an enum class created to store all the particle types used, so they can be easily implemented as member variables, as in the case of the Neutrino flavour\_, or to use switch case logic instead of overly long if else chains. An enum class was chosen over a normal enums so that when used as an input or stored variable, one cannot accidentally change or set a particle type using a number, which is possible with base enums. 
 
+The ParticleType.cpp also contains conversion functions for string to ParticleType and ParticleType to string, abstracting the validation of particle type inputs into one place. The string\_to\_particle\_type function, Listing \ref{strtopt} , uses an unordered map to store key-value pairs, so the string can be looked up and the equivalent ParticleType returned. Using a map allows for multiple strings to correspond to the same ParticleType, such as with "positron" and "anti\_electron" both converting to ParticleType::POSITRON.
+
+\begin{lstlisting}[firstnumber=13, caption={Code snippet from Tau.cpp decay member function. Neutrino instantiation and energy/momentum calculation omitted for clarity}, label=strtopt]
+// std::string to ParticleType
+ParticleType string_to_particle_type(std::string name)
+{
+std::unordered_map<std::string, ParticleType> string_to_type{
+	{"electron", ParticleType::ELECTRON},
+	{"positron", ParticleType::POSITRON},
+	{"anti_electron", ParticleType::POSITRON},
+	// other particle types
+	};
+auto iterator = string_to_type.find(name);
+if(iterator == string_to_type.end())
+{
+  throw std::invalid_argument("invalid particle type");
+}
+return iterator->second;
+}
+\end{lstlisting} 
 rand() for efficiency / misdetection calulation
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{SubDetector}
+%%%%%%%%%%%%%%%%%%%%%%%
 \begin{lstlisting}[firstnumber=36, caption={Code snippet misdetection function where rand() \% 100 gets a number between 0-99, and if its greater than the efficiency, a misdetection occurs. srand(time(0)) seeds the randon number generation.}, label=misdetected]
 bool SubDetector::misdetected() const
 {
@@ -230,14 +255,18 @@ bool SubDetector::misdetected() const
 }
 \end{lstlisting}
 SubDetector has two protected member variables, efficiency, which is as a percentage and required to be between 1\%-100\%, and material which is a string. The efficiency is used in co-ordination with rand(), Listing to cause misdetections by returning true if one occurs, resulting in the detector returning 0.
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{SubDetector hierarchy}
+%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure} 
 	\centering
 	\includegraphics[scale=0.6]{class_sub_detector__inherit__graph.pdf}
 	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
 	\label{detectoruml}
 \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
+%%%%%%%%%%%%%%%%%%%%%
 \begin{lstlisting}[caption={Expected output for Detector when a photon and a proton are passed through it, with the max energy from each sub-detector returned along with a prediction of this outcome based on the energy returned.}, label=result]
 -------------------------------------------------------------------
 Particle : photon | Expected Energy : 5332 MeV 
