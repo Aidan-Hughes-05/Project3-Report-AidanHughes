@@ -48,7 +48,7 @@ May 2026~\\[2cm]
 
 \end{center}
 {\textbf{Abstract}}~\\[0.3cm]
-The aim of this project was to utilize object oriented programming practices to create a particle detector and particle decay simulators in C++. It consists of two main inheritance chains, one for the particle classes and another for sub-detector classes. These classes, and their respective container classes ParticleBunch and Detector, practice encapsulation by storing data members as private or protected with access via public member functions. The use of virtual and pure virtual functions in the abstract parent classes of the hierarchy enables the use dynamic polymorphism in the child classes via base class pointers. The results was a Detector class that could measure the energy  and predict the type of particles in the ParticleBunch passed too it. 
+The aim of this project was to utilize object oriented programming practices to create a particle detector and particle decay simulators in C++. It consists of two main inheritance chains, one for the particle classes and another for sub-detector classes. These classes, and their respective container classes ParticleBunch and Detector, practice encapsulation by storing data members as private or protected with access via public member functions. The use of virtual and pure virtual functions in the abstract parent classes of the hierarchy enables the use dynamic polymorphism in the child classes via base class pointers. The result was a Detector class that could measure the energy  and predict the type of particles in the ParticleBunch passed to it. 
 \end{titlepage}
 \pagenumbering{gobble} % This stops the title page being numbered
 \clearpage
@@ -72,7 +72,7 @@ Object oriented programming (OOP) is built on four pillars: encapsulation, inher
 %%%%%%%%%%%%%%%%%%%%%%%
 \label{Foir}
 The FourMomentum class is constructed from 4 doubles corresponding to each four-momentum component: energy and the x, y and z momenta.
-The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format then a vector in which the index corresponding to each property is not explicit to anyone extending the class.
+The four-momentum components were stored as private double member variables within the FourMomentum class, as this is a more readable format than a vector in which the index corresponding to each property is not explicit to anyone extending the class.
 The components are accessed via getters and setters, returning the value as a double, and the setters taking a double as input and changing the member variable. Using getters and setters along with private variables is an example of encapsulation. In this case the encapsulation allowed for value checking on inputted energy, Listing \ref{ssss}, to ensure it was positive, throwing an error if not, which would not have been possible if the data member was publicly accessible.
 
 \begin{lstlisting}[firstnumber=30, caption={Showing setter for energy private data member in FourMomentum.cpp.}, label=ssss]
@@ -159,7 +159,7 @@ double dot_product(const Particle &particle1, const Particle &particle2)
 	\caption{A UML class diagram for the Particle class inheritance hierarchy. Produced by Doxygen.}	
 	\label{particleuml}
 \end{figure}
-To create classes for the different types of particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. For inheritance, the destructors of the parent class must be defined and virtual, and destructors defined in child class. This is so only the child class destructor is called when the object goes out of scope, avoiding double deletion. 	
+To create classes for the different types of particles, an inheritance hierarchy was used, shown in Figure \ref{particleuml}. For inheritance, the destructors of the parent class must be defined and virtual, and destructors defined in child class. This is so the child and parent class destructor is called when the object goes out of scope, instead of just the parent class destructor. 	
 
 The Particle, Hadron and Lepton classes are abstract classes, so they cannot be instantiated, but allow child classes to inherit important data members and member functions from them. Abstract classes are created by making a function within them pure virtual, using virtual keyword and an =0 at the end of the function declaration. This function must then be defined in the child class, so the info function, which prints the data about an object in this project, was used as every class must have their own defined anyway.
 
@@ -184,7 +184,7 @@ The Higgs and Tau (and Particle) classes possess a decay function, which returns
 %%%%%%%%%%%%%%%%%%%%%%%
 The ParticleBunch class stored particles as a deque of base class unique pointers. Base class pointers allow all child classes of the base class to be stored in the same container via a unique pointer. Not only does this reduce the size of the deque stored on the object, it also allows for dynamic(run-time) polymorphism, shown in Listing \ref{sbs} when particle ptr calls the decays function, which is a flag for if a particle decays. 
 
-\begin{lstlisting}[firstnumber=108, caption={Code snippet from Particle.cpp showing the copy constructor and assignment redefinition in the Particle class.}, label=sbs]
+\begin{lstlisting}[firstnumber=108, caption={Code snippet from ParticleBunch.cpp showing the use of polymorphism in deciding which particles to decay and their results.}, label=sbs]
 void ParticleBunch::decay()
 {
   // deque to store undecayed particles and undecayed decay products
@@ -244,7 +244,7 @@ ParticleType
 contains conversion functions for string to ParticleType and ParticleType to string, abstracting the validation of particle type inputs into one place. The 
 string\_to\_particle\_type function, Listing \ref{strtopt} , uses an unordered map to store key-value pairs, so the string can be looked up and the equivalent ParticleType returned. Using a map allows for multiple strings to correspond to the same ParticleType, such as with "positron" and "anti\_electron" both converting to ParticleType::POSITRON.
 
-\begin{lstlisting}[firstnumber=13, caption={Code snippet from ParticleType.cpp shwoing the string\_to\_particle\_type conversion function.}, label=strtopt]
+\begin{lstlisting}[firstnumber=13, caption={Code snippet from ParticleType.cpp showing the string\_to\_particle\_type conversion function.}, label=strtopt]
 // std::string to ParticleType
 ParticleType string_to_particle_type(std::string name)
 {
@@ -284,8 +284,8 @@ SubDetector has two protected member variables, efficiency, which is as a percen
 	\caption{A UML class diagram for the Detector class inheritance hierarchy. Produced by Doxygen.}	
 	\label{detectoruml}
 \end{figure}
-Figure \ref{detectoruml} shows the Detector class inheritance hierarchy. The child detectors function similarly, each having info and detect functions. The detect functions use the flags discussed in Section \ref{particleh} and run-time polymorphism to discern wether a particle would be detected, Listing \ref{detectorsub}.  
-\begin{lstlisting}[firstnumber=11, caption={Code snippet from ElectromagneticCalorimeter.cpp showing the detect function and how the flags and misdetect function is incorparated.}, label=detectorsub]
+Figure \ref{detectoruml} shows the Detector class inheritance hierarchy. The child detectors function similarly, each having info and detect functions. The detect functions use the flags discussed in Section \ref{particleh} and run-time polymorphism to discern whether a particle would be detected, Listing \ref{detectorsub}.  
+\begin{lstlisting}[firstnumber=11, caption={Code snippet from ElectromagneticCalorimeter.cpp showing the detect function and how the flags and misdetect function is incorporated.}, label=detectorsub]
 double ElectromagneticCalorimeter::detect(
 	const Particle &particle) const
 {
