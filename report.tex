@@ -64,11 +64,7 @@ The aim of this project was to create a C++ library that simulates a particle de
 The tracker, the first sub-detector a particle will pass through, uses magnetic fields to measure particle paths, so can only measure charged particles. Next are the calorimeters, which are split into two, an electromagnetic and a hadronic calorimeter. The electromagnetic calorimeter causes electrons and photons to trigger a particle shower which is measured to finds their energy. The hadronic calorimeter does the same but for protons and neutrons. Finally, due to muons high energy, they are not turned into showers by the calorimeters, and pass through to the Muon Spectrometer sub-detector. Using information about which sub-detectors were triggered, the type of particle that passed through can be deduced. These sub-detectors also have a detection efficiency associated with them, which compares the number of particles detected to the number produced during an event, usually represented as a percentage. 
 
 Along with the particles mentioned above, tau and Higgs particles are also found in accelerators, but decay quickly to other particles. This project focuses on the decays to muon and neutrinos for tau and di-photon decay for the Higgs. All particles have a four-momentum, which is a relativistically conserved property, akin to conservation of three-momentum in classical mechanics. Many particles also have masses, charges or even type specific conservation numbers like lepton number. 
-
-To simulate these, object oriented programming (OOP) was used. OOP has four main concepts: encapsulation, inheritance, polymorphism and abstraction.
-Encapsulation is to make properties of an object private, and only accessible through public member functions of the class. This reduced access can allow for input validation or user friendly interfaces and reduce unnecessary user access to data. 
-Inheritance aims to increase the reusability of code by allowing child classes to gain the functions and properties of their parent class, with a side effect of reducing variance in interface for similar classes. 
-Polymorphism is reusing function names to  
+ 
 \section{Code Implementation}
 Object oriented programming (OOP) is built on four pillars: encapsulation, inheritance, polymorphism and abstraction.
 %%%%%%%%%%%%%%%%%%%%%%%
